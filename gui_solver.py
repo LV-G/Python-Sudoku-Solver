@@ -1,6 +1,6 @@
-# GUI.py
-import pygame
+# gui_solver.py
 import time
+import pygame
 pygame.font.init()
 
 
@@ -51,13 +51,13 @@ class Grid:
 
     def draw(self):
         # Draw Grid Lines
-        gap = self.width / 9
+        gap = self.width // 9
         for i in range(self.rows+1):
             if i % 3 == 0 and i != 0:
                 thick = 4
             else:
                 thick = 1
-            pygame.draw.line(self.win, (0,0,0), (0, i*gap), (self.width, i*gap), thick)
+            pygame.draw.line(self.win, (0, 0, 0), (0, i * gap), (self.width, i * gap), thick)
             pygame.draw.line(self.win, (0, 0, 0), (i * gap, 0), (i * gap, self.height), thick)
 
         # Draw Cubes
@@ -162,19 +162,19 @@ class Cube:
     def draw(self, win):
         fnt = pygame.font.SysFont("comicsans", 40)
 
-        gap = self.width / 9
+        gap = self.width // 9
         x = self.col * gap
         y = self.row * gap
 
         if self.temp != 0 and self.value == 0:
-            text = fnt.render(str(self.temp), 1, (128,128,128))
+            text = fnt.render(str(self.temp), 1, (128, 128, 128))
             win.blit(text, (x+5, y+5))
         elif not(self.value == 0):
             text = fnt.render(str(self.value), 1, (0, 0, 0))
-            win.blit(text, (x + (gap/2 - text.get_width()/2), y + (gap/2 - text.get_height()/2)))
+            win.blit(text, (x + (gap//2 - text.get_width()//2), y + (gap//2 - text.get_height()//2)))
 
         if self.selected:
-            pygame.draw.rect(win, (255,0,0), (x,y, gap ,gap), 3)
+            pygame.draw.rect(win, (255, 0, 0), (x, y, gap, gap), 3)
 
     def draw_change(self, win, g=True):
         fnt = pygame.font.SysFont("comicsans", 40)
@@ -225,17 +225,17 @@ def valid(bo, num, pos):
 
     for i in range(box_y*3, box_y*3 + 3):
         for j in range(box_x * 3, box_x*3 + 3):
-            if bo[i][j] == num and (i,j) != pos:
+            if bo[i][j] == num and (i, j) != pos:
                 return False
 
     return True
 
 
-def redraw_window(win, board, time, strikes):
-    win.fill((255,255,255))
+def redraw_window(win, board, timer, strikes):
+    win.fill((255, 255, 255))
     # Draw time
     fnt = pygame.font.SysFont("comicsans", 40)
-    text = fnt.render("Time: " + format_time(time), 1, (0,0,0))
+    text = fnt.render("Time: " + format_time(timer), 1, (0,0,0))
     win.blit(text, (540 - 160, 560))
     # Draw Strikes
     text = fnt.render("X " * strikes, 1, (255, 0, 0))
@@ -245,16 +245,15 @@ def redraw_window(win, board, time, strikes):
 
 
 def format_time(secs):
-    sec = secs%60
-    minute = secs//60
-    hour = minute//60
+    sec = secs % 60
+    minute = secs // 60
 
-    mat = hour + " " + str(minute) + ":" + str(sec)
+    mat = str(minute) + ":" + str(sec)
     return mat
 
 
 def main():
-    win = pygame.display.set_mode((540,600))
+    win = pygame.display.set_mode((540, 600))
     pygame.display.set_caption("Sudoku")
     board = Grid(9, 9, 540, 540, win)
     key = None
